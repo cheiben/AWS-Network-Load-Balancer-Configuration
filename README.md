@@ -1,7 +1,5 @@
 # AWS-Network-Load-Balancer-Configuration
 
-# AWS Network Load Balancer Configuration Lab
-
 ## Overview
 
 This project demonstrates the complete setup and configuration of a Network Load Balancer (NLB) in AWS, including environment preparation, load balancer creation, and performance monitoring. The lab showcases practical skills in AWS networking, load balancing, and infrastructure management.
