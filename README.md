@@ -13,6 +13,9 @@ The implementation consists of:
 - **Network Security**: Configured Network ACLs and Security Groups
 - **Monitoring**: CloudWatch metrics integration for traffic analysis
 
+
+<img width="1259" height="698" alt="Screenshot 2025-09-29 at 5 00 55 PM" src="https://github.com/user-attachments/assets/46e1931e-5797-4ba3-a39b-677043cf7849" />
+
 ## Key Components
 
 ### Infrastructure Setup
@@ -113,6 +116,7 @@ The load balancer successfully distributed traffic between both instances, demon
 - Proper Network ACL configuration is essential for traffic flow
 - Health checks ensure traffic only routes to healthy instances
 - CloudWatch provides valuable insights into load balancer performance
+
 
 ## Prerequisites
 
