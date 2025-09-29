@@ -140,7 +140,3 @@ The load balancer successfully distributed traffic between both instances, demon
 ## Conclusion
 
 This hands-on lab successfully demonstrates the configuration of a fully functional Network Load Balancer in AWS, showcasing practical skills in cloud networking, load balancing, and infrastructure management. The implementation provides a foundation for building scalable, highly available web applications in AWS.
-
----
-
-**Note**: This project was completed as part of AWS hands-on lab training in the N. Virginia (us-east-1) region.
