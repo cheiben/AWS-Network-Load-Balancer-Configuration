@@ -1,0 +1,93 @@
+# AWS Network Load Balancer Lab Steps
+
+## Prepare the Environment
+
+### Create and Configure a Subnet
+1. Navigate to VPC Management Console
+2. Click **Subnets** → **Create subnet**
+3. Configure subnet:
+   - VPC ID: Select the listed VPC
+   - Subnet name: **PublicA**
+   - Availability Zone: **us-east-1a**
+   - IPv4 CIDR block: **10.0.0.0/24**
+   - Subnet name: **PublicB**
+   - Availability Zone: **us-east-1b**
+   - IPv4 CIDR block: **10.0.2.0/24**
+4. Click **Create subnet**
+5. Select PublicB subnet → **Route table** tab → Click route table link
+6. Click **Routes** tab → **Edit routes** → **Add route**
+7. Add route:
+   - Destination: **0.0.0.0/0**
+   - Target: Select **Internet Gateway** (listed gateway)
+8. Click **Save changes**
+9. Click **Subnet associations** tab → **Edit subnet associations**
+10. Select PublicB subnet → **Save associations**
+
+### Edit the Network ACL
+1. Click **Subnets** → Select **PublicB** subnet
+2. Click **Network ACL** tab → Click Network ACL link
+3. Click **Actions** → **Edit inbound rules**
+4. Update Rule 100:
+   - Rule number: 100, Type: HTTP (80), Protocol: TCP (6), Port: 80, Source: 0.0.0.0/0, Allow
+5. Click **Add new rule** (Rule 110):
+   - Rule number: 110, Type: HTTPS (443), Protocol: TCP (6), Port: 443, Source: 0.0.0.0/0, Allow
+6. Click **Add new rule** (Rule 120):
+   - Rule number: 120, Type: SSH (22), Protocol: TCP (6), Port: 22, Source: 0.0.0.0/0, Allow
+7. Click **Add new rule** (Rule 130):
+   - Rule number: 130, Type: Custom TCP, Protocol: TCP (6), Port: 1024-65535, Source: 0.0.0.0/0, Allow
+8. Click **Save changes**
+
+## Create EC2 Instances
+
+### Create WebA Instance
+1. Navigate to EC2 Management Console → **Instances** → **Launch instances**
+2. Name: **WebA**
+3. AMI: Latest **Amazon Linux 2**
+4. Instance type: **t3.micro**
+5. Key pair: **Proceed without a key pair**
+6. Network settings → **Edit**:
+   - Subnet: Public subnet in **us-east-1a**
+   - Auto-assign Public IP: **Enable**
+   - Select existing Security Group: **EC2SecurityGroup**
+7. Advanced details → User data: Paste the provided script (WebA version)
+8. Click **Launch Instance** → **View all instances**
+
+### Create WebB Instance
+1. Navigate to EC2 → **Instances** → **Launch instances**
+2. Name: **WebB**
+3. AMI: Latest **Amazon Linux 2**
+4. Instance type: **t3.micro**
+5. Key pair: **Proceed without a key pair**
+6. Network settings → **Edit**:
+   - Subnet: Public subnet in **us-east-1b**
+   - Auto-assign Public IP: **Enable**
+   - Select existing Security Group: **EC2SecurityGroup**
+7. Advanced details → User data: Paste the provided script (WebB version)
+8. Click **Launch Instance** → **View all instances**
+9. Wait for instances to pass status checks
+
+## Create and Configure Network Load Balancer
+
+1. Click **Load Balancers** → **Create Load Balancer**
+2. Select **Network Load Balancer** → **Create**
+3. Basic Configuration:
+   - Load Balancer name: **NLB4LAB**
+   - Scheme: **Internet-facing**
+4. Network mapping:
+   - VPC: Select listed VPC
+   - Mappings: Check **us-east-1a** and **us-east-1b**
+5. Ensure no security groups are attached
+6. Listeners and routing → **Create target group** (opens new tab)
+7. Configure target group:
+   - Target type: **Instances**
+   - Target group name: **nlbTargets**
+   - Protocol: **TCP**, Port: **80**
+   - Health check protocol: **TCP**
+8. Click **Next**
+9. Register targets: Select **WebA** and **WebB** → **Include as pending below**
+10. Click **Create target group**
+11. Return to Load balancers tab → Click refresh button
+12. Forward to: Select **nlbTargets**
+13. Click **Create load balancer** → **View load balancer**
+14. Open **Target Groups** in new tab → Select **nlbTargets** → **Targets** tab
+15. Wait for instances to show healthy status
