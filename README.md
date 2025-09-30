@@ -81,6 +81,8 @@ echo "Request Handled by: WebB" >> /var/www/html/index.html
 ### 4. Testing and Monitoring
 - Load tested the NLB using curl in a continuous loop
 - Monitored traffic distribution across both instances
+  ``while true; do curl <LOAD BALANCER DNS NAME>; done
+``
 - Analyzed CloudWatch metrics showing traffic spikes and distribution patterns
 
 ## Technical Skills Demonstrated
